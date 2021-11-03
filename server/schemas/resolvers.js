@@ -5,7 +5,7 @@ const resolvers ={
 Query: {
   me: async (parent, args, context) => {
     if (context.user) {
-      return Profile.findOne({ _id: context.user._id });
+      return User.findOne({ _id: context.user._id });
     }
     throw new AuthenticationError('You need to be logged in!');
   },
@@ -16,6 +16,43 @@ Mutation: {
     const token = signToken(user);
     return ({token,user});
   },
+login: async(parent,{email,password}) => {
+  const user = await User.findOne({email});
+  if (!user) {
+    throw new AuthenticationError('Incorrect credentials');
+  }
+  const correctPw = await user.isCorrectPassword(password);
+  if (!correctPw) {
+    throw new AuthenticationError('Incorrect credentials');
+  }
+  const token = signToken(user);
+  return ({token,user});
+},
+saveBook:async (parent,{books},context)=>{
+if(context.user)
+{
+  const updatedUser = await User.findByIdAndUpdate(
+    { _id: context.user._id },
+    { $push: { savedBooks: books } },
+    { new: true, runValidators: true}
+  );
+  return updatedUser;
+}
+throw new AuthenticationError('Login to save books');
+},
+deleteBook : async (parent,{bookId},context) =>{
+  if(context.user)
+{
+ const updatedUser = await User.findOneAndUpdate(
+  { _id: context.user._id },
+  { $pull: { savedBooks: {bookId} } },
+  { new: true, runValidators: true}
+ );
+ return updatedUser;
+}
+throw new AuthenticationError('Login to delete books');
+}
+}
+}
 
-}
-}
+module.exports = resolver
