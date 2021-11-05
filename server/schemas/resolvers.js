@@ -28,12 +28,12 @@ login: async(parent,{email,password}) => {
   const token = signToken(user);
   return ({token,user});
 },
-saveBook:async (parent,{books},context)=>{
+saveBook:async (parent,{bookData},context)=>{
 if(context.user)
 {
   const updatedUser = await User.findByIdAndUpdate(
     { _id: context.user._id },
-    { $push: { savedBooks: books } },
+    { $push: { savedBooks: bookData } },
     { new: true, runValidators: true}
   );
   return updatedUser;
@@ -55,4 +55,4 @@ throw new AuthenticationError('Login to delete books');
 }
 }
 
-module.exports = resolver
+module.exports = resolvers
