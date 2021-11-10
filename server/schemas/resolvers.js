@@ -31,7 +31,8 @@ login: async(parent,{email,password}) => {
   return ({token,user});
 },
 saveBook:async (parent,{ authors, description, title, bookId, image}, context)=>{
-if(context.user._id)
+console.log("inside saveBook: "+ context.user._id)
+  if(context.user._id)
 {
   const updatedUser = await User.findOneAndUpdate(
     { _id: context.user._id },
