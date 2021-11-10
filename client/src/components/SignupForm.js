@@ -30,8 +30,10 @@ const SignupForm = () => {
 
     try {
 
-      const {data} = await createUser({variables: {...userFormData}});
-      console.log(data)
+      console.log("userFormData:" + JSON.stringify(userFormData))
+      const {data} = await createUser({variables: {...userFormData},
+      });
+      console.log({data})
       if (!data) {
         throw new Error('something went wrong!');
       }

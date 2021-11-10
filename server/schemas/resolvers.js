@@ -13,8 +13,9 @@ Query: {
 },
 Mutation: {
  
-  createUser: async (parent, { username, email, password }) => {
-    const user = await User.create({ username, email, password });
+  createUser: async (parent,args) => {
+    console.log('inside resolver createUser')
+    const user = await User.create(args);
     const token = signToken(user);
     return{ token, user };
   },
