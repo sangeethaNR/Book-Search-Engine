@@ -33,7 +33,7 @@ const SignupForm = () => {
       console.log("userFormData:" + JSON.stringify(userFormData))
       const {data} = await createUser({variables: {...userFormData},
       });
-      console.log({data})
+      console.log("data" + {data})
       if (!data) {
         throw new Error('something went wrong!');
       }
